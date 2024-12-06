@@ -32,6 +32,8 @@ void SystemClockOverride(void);
 int main(void)
 {
 
+	uint32_t eventsToRun = 0;
+
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -41,20 +43,26 @@ int main(void)
 
   ApplicationInit(); // Initializes the LCD functionality
 
-  LCD_Visual_Demo();
-
+//  LCD_Visual_Demo();
+  TextDisplayDemo();
   HAL_Delay(5000);
 
   // DO NOT CALL THIS FUNCTION WHEN INTERRUPT MODE IS SELECTED IN THE COMPILE SWITCH IN stmpe811.h
   // Un-comment the below function after setting COMPILE_TOUCH to 1 in stmpe811.h
   //LCD_Touch_Polling_Demo(); // This function Will not return
 
-  while (1)
-  {
+	for(;;){
+		eventsToRun = getScheduledEvents();
+		// EVENT bitmasks will be all zeros, except for the bit that is the specific Event
+		// Bitwise AND will return non-zero if the event is present, otherwise zero
+//		if ((eventsToRun & EVENT_LED_TOGGLE)>0) { ToggleLED(LED_RED); }
+		if ((eventsToRun & EVENT_NEW_COMMAND)>0) {TextDisplayDemo();}
+	}
 
-  }
 
 }
+
+
 
 /**
   * @brief System Clock Configuration

@@ -32,13 +32,20 @@ void ApplicationInit(void)
 
 	// This is the orientation for the board to be direclty up where the buttons are vertically above the screen
 	// Top left would be low x value, high y value. Bottom right would be low x value, low y value.
-	StaticTouchData.orientation = STMPE811_Orientation_Portrait_2;
+
+	StaticTouchData.orientation = STMPE811_Orientation_Portrait_1;
+//	StaticTouchData.orientation = STMPE811_Orientation_Portrait_2;
 
 	#if TOUCH_INTERRUPT_ENABLED == 1
 	LCDTouchScreenInterruptGPIOInit();
 	#endif // TOUCH_INTERRUPT_ENABLED
 
 	#endif // COMPILE_TOUCH_FUNCTIONS
+
+	#if BUTTON_CHANGE_DISPLAY_ENABLED
+	Button_EnableInterupt();
+	NVICEnableDisable(IRQ_EXTI0, ENABLE);
+	#endif
 }
 
 void LCD_Visual_Demo(void)
@@ -153,3 +160,12 @@ void EXTI15_10_IRQHandler()
 #endif // TOUCH_INTERRUPT_ENABLED
 #endif // COMPILE_TOUCH_FUNCTIONS
 
+#if (BUTTON_CHANGE_DISPLAY_ENABLED)
+void EXTI0_IRQHandler(){
+	NVICEnableDisable(IRQ_EXTI0, DISABLE);
+	addSchedulerEvent(EVENT_NEW_COMMAND);
+	IRQ_Clear(IRQ_EXTI0);
+	EXTI_ClearPending(IRQ_EXTI0);
+	NVICEnableDisable(IRQ_EXTI0, ENABLE);
+}
+#endif

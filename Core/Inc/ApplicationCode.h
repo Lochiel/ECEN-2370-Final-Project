@@ -7,6 +7,10 @@
 
 #include "LCD_Driver.h"
 #include "stm32f4xx_hal.h"
+#include "game.h"
+#include "stm32.h"
+#include "Scheduler.h"
+#include "InterruptControl.h"
 
 #include <stdio.h>
 
@@ -16,6 +20,8 @@
 
 void ApplicationInit(void);
 void LCD_Visual_Demo(void);
+
+#define BUTTON_CHANGE_DISPLAY_ENABLED ENABLED
 
 #if (COMPILE_TOUCH_FUNCTIONS == 1) && (COMPILE_TOUCH_INTERRUPT_SUPPORT == 0)
 void LCD_Touch_Polling_Demo(void);
