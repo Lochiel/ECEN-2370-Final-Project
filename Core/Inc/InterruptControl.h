@@ -20,6 +20,8 @@
 #define IRQ_EXTI3			EXTI3_IRQn
 #define IRQ_EXTI4			EXTI4_IRQn
 
+#define IRQ_TIM7			55
+
 #define BTN_EXTI 			EXTI0
 
 #define MAX_VALID_IRQ 			32

@@ -46,6 +46,7 @@ void ApplicationInit(void)
 	Button_EnableInterupt();
 	NVICEnableDisable(IRQ_EXTI0, ENABLE);
 	#endif
+	GameInit();
 }
 
 void LCD_Visual_Demo(void)
@@ -160,10 +161,19 @@ void EXTI15_10_IRQHandler()
 #endif // TOUCH_INTERRUPT_ENABLED
 #endif // COMPILE_TOUCH_FUNCTIONS
 
+void TIM7_IRQHandler(){
+	NVICEnableDisable(IRQ_TIM7, DISABLE);
+	Timer_Reset(TIM_7);
+	IRQ_Clear(IRQ_TIM7);
+	Timer_Clear_SR(TIM7);
+	Game_Timer_Tick();
+	NVICEnableDisable(IRQ_TIM7, ENABLE);
+}
+
 #if (BUTTON_CHANGE_DISPLAY_ENABLED)
 void EXTI0_IRQHandler(){
 	NVICEnableDisable(IRQ_EXTI0, DISABLE);
-	addSchedulerEvent(EVENT_NEW_COMMAND);
+	addSchedulerEvent(EVENT_BUTTON);
 	IRQ_Clear(IRQ_EXTI0);
 	EXTI_ClearPending(IRQ_EXTI0);
 	NVICEnableDisable(IRQ_EXTI0, ENABLE);

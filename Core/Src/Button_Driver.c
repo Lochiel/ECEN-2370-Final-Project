@@ -33,7 +33,7 @@ void Button_EnableInterupt(){
 	GPIO_InitTypeDef GPIOx_Init;
 
 	GPIOx_Init.Pin = BUTTON_PIN;
-	GPIOx_Init.Mode = GPIO_MODE_IT_RISING_FALLING;
+	GPIOx_Init.Mode = GPIO_MODE_IT_RISING;
 	GPIOx_Init.Speed = GPIO_SPEED_LOW;
 
 	GPIOA_CLK_ENABLE();

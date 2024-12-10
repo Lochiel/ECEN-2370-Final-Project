@@ -14,6 +14,8 @@
 #include "commands.h"
 
 #define DEFAULT_CHAR_WIDTH	15
+#define DEFAULT_CHAR_HIGHT	20
+#define SCREEN_CHAR_WIDTH	225
 
 
 typedef struct{
@@ -23,10 +25,12 @@ typedef struct{
 
 void DisplayInit();
 
-void DisplayCommand(char* command);
-void DisplayString(char* String, position_t start_position);
+position_t DisplayCommand(char* command);
+position_t DisplayText(char* String, position_t start_position);
+position_t DisplayString(char* String, position_t start_position);
+position_t NewLine(position_t position);
 
-position_t FindNextCharPosition(position_t Current, position_t Start);
+position_t FindNextCharPosition(position_t Current, position_t Start, char NextChar);
 
 uint16_t FindCenterOfString(char* String);
 

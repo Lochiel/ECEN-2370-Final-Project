@@ -1,3 +1,9 @@
 
 /Debug
 /Debug
+Debug/objects.list
+Debug/Core/Src/subdir.mk
+Debug/Core/Src/main.su
+Debug/Core/Src/main.cyclo
+Debug/Core/Src/ApplicationCode.su
+Debug/Core/Src/ApplicationCode.cyclo

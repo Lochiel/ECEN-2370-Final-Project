@@ -56,7 +56,7 @@ int main(void)
 		// EVENT bitmasks will be all zeros, except for the bit that is the specific Event
 		// Bitwise AND will return non-zero if the event is present, otherwise zero
 //		if ((eventsToRun & EVENT_LED_TOGGLE)>0) { ToggleLED(LED_RED); }
-		if ((eventsToRun & EVENT_NEW_COMMAND)>0) {TextDisplayDemo();}
+		if ((eventsToRun & EVENT_BUTTON)>0) {BtnPress();}
 	}
 
 

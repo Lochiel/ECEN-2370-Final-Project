@@ -14,7 +14,8 @@ char CommandArray[NUM_OF_COMMANDS][MAX_CHAR_LENGTH] =
 							"You should take a nap",
 							"Yet Another Test Text",
 							"....|....|....|....|....|....|....|",
-							"Some of those that work forces, are the same that burn crosses"};
+							"Some of those that work forces, are the same that burn crosses",
+							"Deny Defend Depose"};
 
 //TODO: STUB
 void GetCommand(char *ReturnCommand){

@@ -12,7 +12,7 @@
 #include "stm32f4xx_hal.h"
 #include <string.h>
 
-#define NUM_OF_COMMANDS		6
+#define NUM_OF_COMMANDS		7
 #define MAX_CHAR_LENGTH		128
 
 void GetCommand(char *ReturnCommand);

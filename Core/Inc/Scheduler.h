@@ -17,7 +17,7 @@ void removeSchedulerEvent(uint32_t event);
 
 #define EVENT_LED_TOGGLE	(1 << 0)
 #define EVENT_DELAY			(1 << 1)
-#define EVENT_POLL_BUTTON	(1 << 2)
+#define EVENT_BUTTON		(1 << 2)
 #define EVENT_APP_DELAY		(1 << 3)
 #define EVENT_NEW_COMMAND	(1 << 4)
 
