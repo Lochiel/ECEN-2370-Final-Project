@@ -25,6 +25,7 @@ position_t DisplayCommand(char* command){
 position_t DisplayText(char* String, position_t start_position){
 
 }
+
 //LCD_DisplayChar(100,140,'H');
 position_t DisplayString(char* String, position_t start_position){
 	uint16_t size = strlen(String);

@@ -11,52 +11,89 @@
 #define	STATE_COMMAND		1
 #define STATE_TIME			2
 
+enum Game_State {
+	Start,
+	Play,
+	Score
+};
 
-uint8_t gamestate = STATE_START;
+enum Game_State gamestate = Start;
 time_counter_t stopwatch;
-RNG_HandleTypeDef hrng;
+uint8_t game_round = 0;
+uint8_t score = 0;
 
-
-//#TODO RNG Setup
-/*
- *       (#) Enable the RNG controller clock using __HAL_RCC_RNG_CLK_ENABLE() macro
-          in HAL_RNG_MspInit().
-      (#) Activate the RNG peripheral using HAL_RNG_Init() function.
-      (#) Wait until the 32 bit Random Number Generator contains a valid
-          random data using (polling/interrupt) mode.
-      (#) Get the 32 bit random number using HAL_RNG_GenerateRandomNumber() function.
- *
- */
 void GameInit(){
 	Stopwatch_Reset(&stopwatch);
 	Game_Timer_Init();
-	__HAL_RCC_RNG_CLK_ENABLE();
-	HAL_RNG_Init(hrng);
+	RNG_Init();
 }
 
 void BtnPress(){
 	switch(gamestate){
-	case STATE_START:
-	case STATE_TIME:
-		Command_State();
+	case Start:
+	case Score:
+		Start_BtnPress();
 		break;
-	case STATE_COMMAND:
-		Time_State();
+	case Play:
+		Play_BtnPress();
 		break;
 	}
 	removeSchedulerEvent(EVENT_BUTTON);
 }
 
-void Command_State(){
-	gamestate = STATE_COMMAND;
+void Play_BtnPress(){
+	if (game_round == MAX_ROUNDS){
+		gamestate = Score;
+		game_round = 0;
+		score = GenerateScore();
+	} else {
+		game_round += 1;
+	}
+	addSchedulerEvent(EVENT_UPDATE);
+	return;
+}
+
+void Start_BtnPress(){
+	gamestate = Play;
+	addSchedulerEvent(EVENT_UPDATE);
+}
+
+void Update(){
+	switch(gamestate){
+		case Start:
+			GameStart();
+			break;
+		case Score:
+			Time_State();
+			break;
+		case Play:
+			Command_State();
+			break;
+	}
+	removeSchedulerEvent(EVENT_UPDATE);
+}
+
+void UpdateClock(){
+	if (gamestate == Score){
+		Time_State();
+	}
+	removeSchedulerEvent(EVENT_TICK);
+}
+
+void GameStart(){
+	gamestate = Play;
 	Game_Timer_Reset();
 	Game_Timer_Start();
-	TextDisplayDemo();
+	Command_State();
+}
+void Command_State(){
+	Game_Timer_Start();
+	RoundDisplay();
 }
 
 void Time_State(){
-	gamestate = STATE_TIME;
-	Game_Timer_Stop();
+	gamestate = Score;
+//	Game_Timer_Stop();
 //	TimerToStopwatch(TIM_7, &stopwatch);
 	TimeDisplay();
 }
@@ -64,10 +101,31 @@ void Time_State(){
 void TimeDisplay(){
 	position_t position;
 	char timestring[MAX_CHAR_LENGTH];
+	char Score_String[MAX_CHAR_LENGTH];
 	Stopwatch_To_String(&stopwatch, timestring);
+	ScoreString(Score_String, score);
 	position = DisplayCommand(timestring);
 	position = NewLine(position);
-	DisplayString("has past since you started", position);
+	position = DisplayString("has past since you started", position);
+	position = NewLine(position);
+	DisplayString(Score_String, position);
+}
+
+void RoundDisplay(){
+	position_t position;
+	char Round_String[MAX_CHAR_LENGTH];
+	char Command[MAX_CHAR_LENGTH];
+	sprintf(Round_String,"Round: %d\n", game_round);
+	GetCommand(Command);
+	position = DisplayCommand(Round_String);
+	position = NewLine(position);
+	DisplayString(Command, position);
+}
+
+void StartScreenDisplay(){
+	char Command[MAX_CHAR_LENGTH];
+	GetQuote(Command);
+	DisplayCommand(Command);
 }
 
 void TextDisplayDemo(){
@@ -80,7 +138,7 @@ void TextDisplayDemo(){
 void Game_Timer_Init(){
 	GPTimer_Config_t timer;
 	timer.ClockDivision = CLK_DIV_1;
-	timer.Prescaler = 96;
+	timer.Prescaler = 1282;
 	timer.CenterAlignedMode = COUNTING_UP;
 	timer.ARR_Buffer_Enabled = DISABLE;
 	timer.CountDownModeEnabled = DISABLE;
@@ -89,7 +147,7 @@ void Game_Timer_Init(){
 	timer.OnePulseModeEnabled = DISABLE;
 	timer.MasterMode = DISABLE;
 
-	uint32_t arr = 0xFF50;
+	uint32_t arr = 0xFFF2;
 	timer.ARR = arr;
 
 	Timer_Init(TIM_7, timer);
@@ -97,6 +155,7 @@ void Game_Timer_Init(){
 
 void Game_Timer_Tick(){
 	Stopwatch_Increment(&stopwatch);
+	addSchedulerEvent(EVENT_TICK);
 }
 
 void Game_Timer_Start(){
@@ -111,4 +170,14 @@ void Game_Timer_Reset(){
 	Timer_Reset(TIM_7);
 }
 
+uint8_t GenerateScore(){
+	uint32_t score = RandNum();
+	uint8_t rtn_score = (uint8_t)score;
+	rtn_score = rtn_score%64;
+	return rtn_score;
+}
+
+void ScoreString(char* String, uint8_t score){
+	sprintf(String, "Score: %d\n", score);
+}
 

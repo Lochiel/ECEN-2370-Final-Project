@@ -44,7 +44,7 @@ int main(void)
   ApplicationInit(); // Initializes the LCD functionality
 
 //  LCD_Visual_Demo();
-  TextDisplayDemo();
+  StartScreenDisplay();
   HAL_Delay(5000);
 
   // DO NOT CALL THIS FUNCTION WHEN INTERRUPT MODE IS SELECTED IN THE COMPILE SWITCH IN stmpe811.h
@@ -57,6 +57,8 @@ int main(void)
 		// Bitwise AND will return non-zero if the event is present, otherwise zero
 //		if ((eventsToRun & EVENT_LED_TOGGLE)>0) { ToggleLED(LED_RED); }
 		if ((eventsToRun & EVENT_BUTTON)>0) {BtnPress();}
+		if ((eventsToRun & EVENT_UPDATE)>0)	{Update();}
+		if ((eventsToRun & EVENT_TICK) > 0) {UpdateClock();}
 	}
 
 

@@ -17,7 +17,6 @@
 #define DEFAULT_CHAR_HIGHT	20
 #define SCREEN_CHAR_WIDTH	225
 
-
 typedef struct{
 	uint16_t X;
 	uint16_t Y;
