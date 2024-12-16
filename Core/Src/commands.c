@@ -28,7 +28,7 @@ char CommandArray[NUM_OF_COMMANDS][MAX_CHAR_LENGTH] =
 							"Simon Says:\n Bop It! Twist It! Pull It!",
 							"Simon Says:\n Press the Black Button",
 							"Simon Says:\n Put your left leg in",
-							"Simon Says:\n Shake it all about",
+							"Simon Says:\n Shake it out",
 							"Simon Says:\n Donate to his cause",
 							"Simon Says:\n Press the Green Circle",
 							"Simon Says:\n Press the Golden Triangle",
